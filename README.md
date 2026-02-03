@@ -73,3 +73,85 @@ gcloud auth application-default print-access-token
 terraform init
 terraform plan
 terraform apply -auto-approve
+
+# week2_homework
+## Question 1
+import requests
+
+url = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/yellow_tripdata_2020-12.csv"
+local_filename = "yellow_tripdata_2020-12.csv"
+
+response = requests.get(url, stream=True)
+
+with open(local_filename, 'wb') as f:
+    for chunk in response.iter_content(chunk_size=1024):
+        if chunk:
+            f.write(chunk)
+
+print(f"File downloaded and saved as {local_filename}")
+
+## Question 2
+import os
+import pandas as pd
+
+
+file_path = "yellow_tripdata_2020-12.csv"
+data = pd.read_csv(file_path)
+
+file_size = os.path.getsize(file_path) / (1024 * 1024)  # 转换为 MB
+print(f"The uncompressed file size is: {file_size:.2f} MB")
+
+## Question 3
+import pandas as pd
+
+# 假设的年份和月份组合
+years = [2020]
+months = [1, 2, 3, 4, 5, 6, 7]  
+taxi_types = ['yellow', 'green']
+
+for year in years:
+    for month in months:
+        for taxi_type in taxi_types:
+            filename = f"{taxi_type}_tripdata_{year}-{month:02d}.csv"
+            print(f"Processing {filename}")
+            
+            # data = pd.read_csv(filename)
+
+
+## Question 4
+import schedule
+import time
+from datetime import datetime
+import pytz
+
+ny_timezone = pytz.timezone('America/New_York')
+
+def job():
+    print(f"Job executed at {datetime.now(ny_timezone)}")
+
+schedule.every(1).minute.do(job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+## Question 5
+import pandas as pd
+
+yellow_data = pd.read_csv("yellow_tripdata_2020.csv")
+
+num_rows = len(yellow_data)
+print(f"Number of rows in Yellow Taxi data for 2020: {num_rows}")
+
+
+## Question 6
+inputs = {
+    'taxi': 'green',
+    'year': 2020,
+    'month': 4
+}
+
+file_name = f"{inputs['taxi']}_tripdata_{inputs['year']}-{inputs['month']:02d}.csv"
+print(f"Rendered file name: {file_name}")
+
+
